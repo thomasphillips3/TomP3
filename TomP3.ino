@@ -5,7 +5,7 @@
 #include <Bounce2.h> 
 
 #define B_NEXT  A0
-#define B_STOP  A1
+#define B_PREV  A1
 #define B_PLAY  A2
 #define BUTTON_DEBOUNCE_PERIOD 20 //ms
 
@@ -14,7 +14,7 @@ SFEMP3Shield MP3player;
 boolean playing = false;
 
 Bounce b_Next  = Bounce();
-Bounce b_Stop  = Bounce();
+Bounce b_Prev  = Bounce();
 Bounce b_Play  = Bounce();
 
 /**
@@ -29,13 +29,13 @@ void setup() {
   Serial.begin(115200);
 
   pinMode(B_NEXT, INPUT_PULLUP);
-  pinMode(B_STOP, INPUT_PULLUP);
+  pinMode(B_PREV, INPUT_PULLUP);
   pinMode(B_PLAY, INPUT_PULLUP);
 
   b_Next.attach(B_NEXT);
   b_Next.interval(BUTTON_DEBOUNCE_PERIOD);
-  b_Stop.attach(B_STOP);
-  b_Stop.interval(BUTTON_DEBOUNCE_PERIOD);
+  b_Prev.attach(B_PREV);
+  b_Prev.interval(BUTTON_DEBOUNCE_PERIOD);
   b_Play.attach(B_PLAY);
   b_Play.interval(BUTTON_DEBOUNCE_PERIOD);
 
@@ -74,10 +74,10 @@ void loop() {
     }
   }
 
-  if (b_Stop.update()) {
-    if (b_Stop.read() == LOW)	{
-      Serial.print(F("B_STOP pressed, Stopping Track #"));
-      Serial.println(current_track);
+  if (b_Prev.update()) {
+    if (b_Prev.read() == LOW)	{
+      Serial.print(F("PREVIOUS"));
+      Serial.println();
       MP3player.stopTrack();
     }
   }
