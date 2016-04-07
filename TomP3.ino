@@ -78,14 +78,17 @@ void loop() {
     if (b_Prev.read() == LOW)	{
       Serial.print(F("PREVIOUS"));
       Serial.println();
+      current_track--;
       MP3player.stopTrack();
+      MP3player.playTrack(current_track);
     }
   }
 
   if (b_Next.update()) {
     if (b_Next.read() == LOW)	{
-      Serial.print(F("B_NEXT pressed, Start Playing Next Track #"));
-      Serial.println(++current_track);
+      Serial.print(F("NEXT));
+      Serial.println();
+      current_track++;
       MP3player.stopTrack();
       MP3player.playTrack(current_track);
     }
