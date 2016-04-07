@@ -8,10 +8,13 @@
 #define B_PREV  A1
 #define B_PLAY  A2
 #define BUTTON_DEBOUNCE_PERIOD 20 //ms
+#define SEED_PIN A5
 
 SdFat sd;
+SdFile file;
+SdFile dirFile;
+
 SFEMP3Shield MP3player;
-boolean playing = false;
 
 Bounce b_Next  = Bounce();
 Bounce b_Prev  = Bounce();
@@ -27,6 +30,9 @@ int8_t current_track = 0;
 
 void setup() {
   Serial.begin(115200);
+
+  randomSeed(analogRead(SEED_PIN));
+  current_track = random(0, 10);
 
   pinMode(B_NEXT, INPUT_PULLUP);
   pinMode(B_PREV, INPUT_PULLUP);
@@ -46,8 +52,7 @@ void setup() {
   if (!sd.chdir("/")) {
     sd.errorHalt("sd.chdir");
   } 
-//  sd.ls();
-
+  
   MP3player.begin();
   MP3player.setVolume(10,10);
   
@@ -65,17 +70,15 @@ void loop() {
 
   if (b_Play.update()) {
     if (b_Play.read() == LOW)	{
-//      if(MP3player.getState() == playback) {
-  if (playing) {
+      if(MP3player.getState() == playback) {
         Serial.print(F("PAUSE"));
         Serial.println();
         MP3player.pauseMusic();
-        playing = false;
       } else {
         Serial.print(F("PLAY"));
         Serial.println();
-        MP3player.playTrack(1);
-        playing = true;
+        MP3player.playTrack(current_track);
+        MP3player.resumeMusic();
       }
     }
   }
