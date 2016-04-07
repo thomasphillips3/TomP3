@@ -11,6 +11,7 @@
 
 SdFat sd;
 SFEMP3Shield MP3player;
+boolean playing = false;
 
 Bounce b_Next  = Bounce();
 Bounce b_Stop  = Bounce();
@@ -44,7 +45,7 @@ void setup() {
   MP3player.begin();
   MP3player.setVolume(10,10);
   
-  Serial.println(F("Looking for Buttons to be depressed..."));
+  Serial.println(F("Listening for button press"));
 }
 
 void loop() {
@@ -59,9 +60,17 @@ void loop() {
 
   if (b_Play.update()) {
     if (b_Play.read() == LOW)	{
-      Serial.print(F("B_PLAY pressed, Start Playing Track # "));
-      Serial.println(current_track);
-      MP3player.playTrack(current_track);
+      if (playing == false) {
+        Serial.print(F("PLAY"));
+        Serial.println();
+        MP3player.playTrack(current_track);
+        playing = true;
+      } else if (playing == true) {
+        Serial.print(F("PAUSE"));
+        Serial.println();
+        MP3player.pauseMusic();
+        playing = false;
+      }
     }
   }
 
