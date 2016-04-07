@@ -39,8 +39,14 @@ void setup() {
   b_Play.attach(B_PLAY);
   b_Play.interval(BUTTON_DEBOUNCE_PERIOD);
 
-  if(!sd.begin(9, SPI_HALF_SPEED)) sd.initErrorHalt();
-  if (!sd.chdir("/")) sd.errorHalt("sd.chdir");
+  if(!sd.begin(9, SPI_HALF_SPEED)) {
+    sd.initErrorHalt();
+  }
+  
+  if (!sd.chdir("/")) {
+    sd.errorHalt("sd.chdir");
+  } 
+//  sd.ls();
 
   MP3player.begin();
   MP3player.setVolume(10,10);
@@ -49,7 +55,6 @@ void setup() {
 }
 
 void loop() {
-
 // Below is only needed if not interrupt driven. Safe to remove if not using.
 #if defined(USE_MP3_REFILL_MEANS) \
     && ( (USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer) \
@@ -60,16 +65,17 @@ void loop() {
 
   if (b_Play.update()) {
     if (b_Play.read() == LOW)	{
-      if (playing == false) {
-        Serial.print(F("PLAY"));
-        Serial.println();
-        MP3player.playTrack(current_track);
-        playing = true;
-      } else if (playing == true) {
+//      if(MP3player.getState() == playback) {
+  if (playing) {
         Serial.print(F("PAUSE"));
         Serial.println();
         MP3player.pauseMusic();
         playing = false;
+      } else {
+        Serial.print(F("PLAY"));
+        Serial.println();
+        MP3player.playTrack(1);
+        playing = true;
       }
     }
   }
