@@ -86,7 +86,7 @@ void loop() {
 
   if (b_Next.update()) {
     if (b_Next.read() == LOW)	{
-      Serial.print(F("NEXT));
+      Serial.print(F("NEXT"));
       Serial.println();
       current_track++;
       MP3player.stopTrack();
