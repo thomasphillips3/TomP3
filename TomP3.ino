@@ -91,6 +91,7 @@ void loop() {
     if (b_Play.read() == LOW)	{
       if(MP3player.getState() == playback) {
         Serial.print(F("PAUSE"));
+        Serial.println();
         lcd.home();
         lcd.clear();
         lcd.write("Music paused");
@@ -99,6 +100,7 @@ void loop() {
         Serial.print(F("PLAY"));
         Serial.println();
         MP3player.trackTitle((char*)&title);
+        Serial.println();
         Serial.write((byte*)&title, 30);
         lcd.home();
         lcd.clear();
@@ -113,6 +115,7 @@ void loop() {
     if (b_Prev.read() == LOW)	{
       if(MP3player.getState() == playback) {
         Serial.print(F("PREVIOUS"));
+        Serial.println();
         lcd.home();
         lcd.clear();
         lcd.write("Previous track");
@@ -126,6 +129,7 @@ void loop() {
   if (b_Next.update()) {
     if (b_Next.read() == LOW)	{
       Serial.print(F("NEXT"));
+      Serial.println();
       lcd.home();
       lcd.clear();
       lcd.write("Next track");
